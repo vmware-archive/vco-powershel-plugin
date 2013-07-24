@@ -1,0 +1,72 @@
+# prints the serialized format of the evaluated script result 
+ function broker_serialize($stringScript, $level=2, $tempFile = [IO.Path]::GetTempFileName(), $errFile = [IO.Path]::GetTempFileName(), $cleanUp=$true) { 
+    write-host   '' 
+    write-host   '============RESULT_DELIMITER_START==========' 
+    trap { 
+        # this installs an error handler for the function
+        write-host   '============ERRORS_START==========' 
+        if ($error) { 
+            write-host   $error[0].Exception  
+        }  
+        $error.clear()
+        write-host   '============ERRORS_END============'  
+        write-host   'RESULT_DELIMITER' 
+    } 
+    
+    $objectList = Invoke-Expression $stringScript 2> $errFile
+    if ($objectList -eq $null) {
+		#  nothing to process
+	} else {
+        $refId = addVariable $objectList
+        serialize $objectList $tempFile $level
+        
+        # Write result objects to host for user friendly output
+    	$objectList 
+    	
+    	# Serialize  
+        write-host   ''
+        write-host   '============OUTPUT_START=========='
+        write-host "$refId@REFIDEND@" 
+        Get-Content $tempFile -readCount 0 | write-host
+        write-host   '============OUTPUT_END============'  
+    } 
+    write-host   '' 
+    write-host   '============ERRORS_START==========' 
+    get-content $errFile | write-host
+    write-host   '============ERRORS_END============'
+    write-host   '============RESULT_DELIMITER==========' 
+    if($cleanUp){
+        Remove-Item $errFile
+        Remove-Item $tempFile
+    }   
+ } 
+ 
+ function serialize($object, $tempFile = [IO.Path]::GetTempFileName()) {
+    trap { 
+        # used to serialize objects of type that causes errors with -InputObject parameter
+        # something like [scriptblock]
+       $object | Export-CLIXML $tempFile
+    }
+    Export-CLIXML $tempFile -InputObject $object
+ }
+ 
+ function deserialize($xml) {
+    $tempFile = [IO.Path]::GetTempFileName()
+    $null = Set-Content $tempFile $xml     
+    $obj = Import-CLIXML $tempFile
+    Remove-Item $tempFile
+    
+    return $obj;
+ }
+ 
+ $session = @{};
+ function addVariable( $data){
+    
+    [string] $key = [guid]::NewGuid();
+    $session.Add([string] $key, $data);
+    return $key;
+ }
+
+ function getVarByRef( [string] $key ){
+    return $session.Get_Item($key)
+ }

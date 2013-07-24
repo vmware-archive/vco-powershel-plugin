@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Copyright (c) 2011-2012 VMware, Inc.
+
+This file is part of the vCO PowerShell Plug-in.
+
+The vCO PowerShell Plug-in is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by the Free
+Software Foundation version 3 and no later version.
+
+The vCO PowerShell Plug-in is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License version 3
+for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program; if not, write to the Free Software Foundation, Inc., 51 Franklin
+St, Fifth Floor, Boston, MA 02110-1301 USA.
+-->
+
+<project name="o11nplugin-powershell-from-maven" default="package" basedir=".">
+
+	<!-- ====================================================================== -->
+	<!-- Build environment properties                                           -->
+	<!-- ====================================================================== -->
+
+	<property file="../maven-build.properties" />
+	<property name="maven.build.finalName" value="o11nplugin-powershell" />
+	
+	<!-- ====================================================================== -->
+	<!-- Defining classpaths                                                    -->
+	<!-- ====================================================================== -->
+
+	<path id="build.classpath">
+		<pathelement location="${maven.repo.local}/o11nplugin-powershell-core.jar" />
+
+		<pathelement location="${maven.repo.local}/o11n-sdkapi.jar"/>
+		<pathelement location="${maven.repo.local}/o11n-model.jar"/>
+		<pathelement location="${maven.repo.local}/o11n-util.jar"/>
+		<pathelement location="${maven.repo.local}/o11n-plugin-sdk-tools.jar"/>
+		<pathelement location="${maven.repo.local}/o11n-plugin-sdk-spring.jar"/>
+		<pathelement location="${maven.repo.local}/o11n-plugin-sdk-plugen.jar"/>
+		
+		<pathelement location="${maven.repo.local}/commons-cli-1.2.jar"/>
+		<pathelement location="${maven.repo.local}/commons-collections-3.2.1.jar"/>
+		<pathelement location="${maven.repo.local}/commons-lang-2.6.jar" />
+		<pathelement location="${maven.repo.local}/commons-logging-1.0.4.jar" />
+		<pathelement location="${maven.repo.local}/json-20090211.jar"/>
+		<pathelement location="${maven.repo.local}/slf4j-api-1.5.8.jar"/>
+		<pathelement location="${maven.repo.local}/xstream-1.3.1.jar"/>
+		<pathelement location="${maven.repo.local}/spring-asm-3.1.0.RELEASE.jar"/>
+		<pathelement location="${maven.repo.local}/spring-beans-3.1.0.RELEASE.jar"/>
+		<pathelement location="${maven.repo.local}/spring-context-3.1.0.RELEASE.jar"/>
+		<pathelement location="${maven.repo.local}/spring-core-3.1.0.RELEASE.jar"/>
+		<pathelement location="${maven.repo.local}/spring-oxm-3.1.0.RELEASE.jar"/>
+	</path>
+	<path id="build.test.classpath" />
+
+	<fileset id="dar.libraries" dir="${maven.repo.local}">
+		<include name="o11nplugin-powershell-core.jar" />
+		
+		<include name="o11n-plugin-sdk-spring.jar" />
+		<include name="o11n-plugin-sdk-tools.jar" />
+		<include name="overthere-vmw-1.0.6.jar" />
+
+		<include name="aopalliance-1.0.jar" />
+		<include name="bcprov-jdk16-1.45.jar" />
+		<include name="commons-beanutils-1.7.0.jar" />
+		<include name="commons-codec-1.3.jar" />
+		<include name="commons-collections-3.2.1.jar" />
+		<include name="commons-digester-1.6.jar" />
+		<include name="commons-io-1.4.jar" />
+		<include name="commons-lang-2.6.jar" />
+		<include name="commons-logging-1.1.1.jar" />
+		<include name="commons-net-2.0.jar" />
+		<include name="commons-validator-1.3.1.jar" />
+		<include name="dom4j-1.6.1.jar" />
+		<include name="guava-r09.jar" />
+		<include name="httpclient-4.1.1.jar" />
+		<include name="httpcore-4.1.jar" />
+		<include name="icu4j-2.6.1.jar" />
+		<include name="javassist-3.8.0.GA.jar" />
+		<include name="jaxen-1.1.1.jar" />
+		<include name="jcifs-1.3.3.jar" />
+		<include name="jdom-1.0.jar" />
+		<include name="jsch-0.1.44-1.jar" />
+		<include name="json-20090211.jar" />
+		<include name="jzlib-1.0.7.jar" />
+		<include name="scannit-0.13.jar" />
+		<include name="spring-aop-3.1.0.M2.jar" />
+		<include name="spring-asm-3.1.0.M2.jar" />
+		<include name="spring-beans-3.1.0.M2.jar" />
+		<include name="spring-context-3.1.0.M2.jar" />
+		<include name="spring-core-3.1.0.M2.jar" />
+		<include name="spring-expression-3.1.0.M2.jar" />
+		<include name="sshj-0.5.0.jar" />
+		<include name="truezip-driver-file-7.2.jar" />
+		<include name="truezip-driver-zip-7.2.jar" />
+		<include name="truezip-file-7.2.jar" />
+		<include name="truezip-kernel-7.2.jar" />
+		<include name="xom-1.0.jar" />
+		<include name="xpp3_min-1.1.4c.jar" />
+		<include name="xstream-1.3.1.jar" />
+	</fileset>
+
+	<!-- ====================================================================== -->
+	<!-- Cleaning up target                                                     -->
+	<!-- ====================================================================== -->
+
+	<target name="clean" description="Clean the output directory">
+		<delete dir="${maven.build.dir}" />
+		<delete dir="../dist" />
+	</target>
+
+	<!-- ====================================================================== -->
+	<!-- Compilation target                                                     -->
+	<!-- ====================================================================== -->
+
+	<target name="compile" depends="get-deps" description="Compile the code">
+		<mkdir dir="${maven.build.outputDir}" />
+	</target>
+
+	<!-- ====================================================================== -->
+	<!-- Test-compilation target                                                -->
+	<!-- ====================================================================== -->
+
+	<target name="compile-tests" depends="compile" description="Compile the test code" unless="maven.test.skip">
+		<mkdir dir="${maven.build.testOutputDir}" />
+	</target>
+
+	<!-- ====================================================================== -->
+	<!-- Run all tests                                                          -->
+	<!-- ====================================================================== -->
+
+	<target name="test" depends="compile-tests, junit-missing" unless="junit.skipped" description="Run the test cases" />
+
+	<target name="test-junit-present">
+		<available classname="junit.framework.Test" property="junit.present" />
+	</target>
+
+	<target name="test-junit-status" depends="test-junit-present">
+		<condition property="junit.missing">
+			<and>
+				<isfalse value="${junit.present}" />
+				<isfalse value="${maven.test.skip}" />
+			</and>
+		</condition>
+		<condition property="junit.skipped">
+			<or>
+				<isfalse value="${junit.present}" />
+				<istrue value="${maven.test.skip}" />
+			</or>
+		</condition>
+	</target>
+
+	<target name="junit-missing" depends="test-junit-status" if="junit.missing">
+		<echo>=================================== WARNING ===================================</echo>
+		<echo> JUnit is not present in your $ANT_HOME/lib directory. Tests not executed.</echo>
+		<echo>===============================================================================</echo>
+	</target>
+
+	<!-- ====================================================================== -->
+	<!-- Javadoc target                                                         -->
+	<!-- ====================================================================== -->
+
+	<target name="javadoc" description="Generates the Javadoc of the application" />
+
+	<!-- ====================================================================== -->
+	<!-- Package target                                                         -->
+	<!-- ====================================================================== -->
+
+	<target name="package" depends="compile,test" description="Package the application">
+		<antcall target="generate-vso" />
+		<antcall target="create-dar" />
+		<antcall target="create-vmoapp" />
+	</target>
+
+	<target name="generate-vso">
+		<java fork="true" failonerror="yes" classname="com.vmware.o11n.plugin.sdk.plugen.vso.VsoGenerator" classpathref="build.classpath">
+			<arg line="-name ${plugin.build.name}" />
+			<arg line="-vsoDirectory ${maven.build.darDir}/VSO-INF" />
+			<arg line="-moduleBuilder com.vmware.o11n.plugin.PowerShellModuleBuilder" />
+		</java>
+	</target>
+
+	<target name="create-dar">
+		<tstamp>
+			<format property="current.time" pattern="yyyyMMdd-HHmm" />
+		</tstamp>
+
+		<!-- Prepare DAR file -->
+		<mkdir dir="${maven.build.dir}/${maven.build.finalName}" />
+		<mkdir dir="${maven.build.dir}/${maven.build.finalName}/lib" />
+		<copy todir="${maven.build.dir}/${maven.build.finalName}/lib">
+			<fileset refid="dar.libraries" />
+		</copy>
+		<copy todir="${maven.build.dir}/${maven.build.finalName}">
+			<fileset dir="${maven.build.darDir}" casesensitive="yes" />
+		</copy>
+
+		<!-- Set build number and installation mode -->
+		<replace file="${maven.build.dir}/${maven.build.finalName}/VSO-INF/vso.xml" token="${build.number}" value="${plugin.build.number}" />
+        <replace file="${maven.build.dir}/${maven.build.finalName}/VSO-INF/vso.xml" token="${installation.mode}" value="version" />
+
+		<!-- Create DAR file -->
+		<jar jarfile="${maven.build.dir}/${maven.build.finalName}.dar" compress="true" duplicate="preserve">
+			<fileset dir="${maven.build.dir}/${maven.build.finalName}">
+				<include name="**/*" />
+			</fileset>
+			<manifest>
+				<attribute name="App-Vendor-Short" value="vmware" />
+				<attribute name="Build-Date" value="${current.time}" />
+				<attribute name="Build-Number" value="${plugin.build.number}" />
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Specification-Vendor" value="VMware, Inc." />
+			</manifest>
+		</jar>
+		<mkdir dir="../dist" />
+		<copy todir="../dist">
+			<fileset file="${maven.build.dir}/${maven.build.finalName}.dar" />
+		</copy>
+	</target>
+
+	<target name="create-vmoapp" depends="create-dar">
+		<tstamp>
+			<format property="current.time" pattern="yyyyMMdd-HHmm" />
+		</tstamp>
+
+		<!-- Create VMOAPP file -->
+		<jar jarfile="../dist/${maven.build.finalName}.vmoapp" compress="true" duplicate="preserve">
+			<fileset dir="../dist" file="../dist/${maven.build.finalName}.dar" />
+			<fileset dir="${maven.build.vmoappDir}" casesensitive="yes" />
+			<manifest>
+				<attribute name="App-Vendor-Short" value="vmware" />
+				<attribute name="Build-Date" value="${current.time}" />
+				<attribute name="Build-Number" value="${plugin.build.number}" />
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Specification-Vendor" value="VMware, Inc." />
+			</manifest>
+		</jar>
+	</target>
+
+	<!-- ====================================================================== -->
+	<!-- Download dependencies target                                           -->
+	<!-- ====================================================================== -->
+
+	<target name="test-offline">
+		<condition property="maven.mode.offline">
+			<equals arg1="${maven.settings.offline}" arg2="true" />
+		</condition>
+	</target>
+
+	<target name="get-deps" depends="test-offline" description="Download all dependencies" unless="maven.mode.offline">
+		<mkdir dir="${maven.repo.local}" />
+        <get src="http://repo1.maven.org/maven2/commons-cli/commons-cli/1.2/commons-cli-1.2.jar" dest="${maven.repo.local}/commons-cli-1.2.jar" usetimestamp="true" ignoreerrors="true" />
+        <get src="http://maven.springframework.org.s3.amazonaws.com/release/org/springframework/spring-asm/3.1.0.RELEASE/spring-asm-3.1.0.RELEASE.jar" dest="${maven.repo.local}/spring-asm-3.1.0.RELEASE.jar" usetimestamp="true" ignoreerrors="true" />
+        <get src="http://maven.springframework.org.s3.amazonaws.com/release/org/springframework/spring-beans/3.1.0.RELEASE/spring-beans-3.1.0.RELEASE.jar" dest="${maven.repo.local}/spring-beans-3.1.0.RELEASE.jar" usetimestamp="true" ignoreerrors="true" />
+        <get src="http://maven.springframework.org.s3.amazonaws.com/release/org/springframework/spring-context/3.1.0.RELEASE/spring-context-3.1.0.RELEASE.jar" dest="${maven.repo.local}/spring-context-3.1.0.RELEASE.jar" usetimestamp="true" ignoreerrors="true" />
+        <get src="http://maven.springframework.org.s3.amazonaws.com/release/org/springframework/spring-core/3.1.0.RELEASE/spring-core-3.1.0.RELEASE.jar" dest="${maven.repo.local}/spring-core-3.1.0.RELEASE.jar" usetimestamp="true" ignoreerrors="true" />
+        <get src="http://maven.springframework.org.s3.amazonaws.com/release/org/springframework/spring-oxm/3.1.0.RELEASE/spring-oxm-3.1.0.RELEASE.jar" dest="${maven.repo.local}/spring-oxm-3.1.0.RELEASE.jar" usetimestamp="true" ignoreerrors="true" />
+	</target>
+
+</project>

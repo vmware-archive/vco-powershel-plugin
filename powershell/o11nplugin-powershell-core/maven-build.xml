@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Copyright (c) 2011-2012 VMware, Inc.
+
+This file is part of the vCO PowerShell Plug-in.
+
+The vCO PowerShell Plug-in is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by the Free
+Software Foundation version 3 and no later version.
+
+The vCO PowerShell Plug-in is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License version 3
+for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program; if not, write to the Free Software Foundation, Inc., 51 Franklin
+St, Fifth Floor, Boston, MA 02110-1301 USA.
+-->
+
+<project name="o11nplugin-powershell-core-from-maven" default="package" basedir=".">
+
+	<!-- ====================================================================== -->
+	<!-- Build environment properties                                           -->
+	<!-- ====================================================================== -->
+
+	<property file="../maven-build.properties" />
+	<property name="maven.build.finalName" value="o11nplugin-powershell-core" />
+
+	<!-- ====================================================================== -->
+	<!-- Defining classpaths                                                    -->
+	<!-- ====================================================================== -->
+
+	<path id="build.classpath">
+		<pathelement location="${maven.repo.local}/o11n-sdkapi.jar"/>
+		<pathelement location="${maven.repo.local}/o11n-model.jar"/>
+		<pathelement location="${maven.repo.local}/o11n-util.jar"/>
+		<pathelement location="${maven.repo.local}/o11n-plugin-sdk-tools.jar"/>
+		<pathelement location="${maven.repo.local}/o11n-plugin-sdk-spring.jar"/>
+		<pathelement location="${maven.repo.local}/overthere-vmw-1.0.6.jar"/>
+
+		<pathelement location="${maven.repo.local}/bcprov-jdk15-140.jar"/>
+		<pathelement location="${maven.repo.local}/jchronic-0.2.6.jar"/>
+		<pathelement location="${maven.repo.local}/ehcache-1.5.0.jar"/>
+		<pathelement location="${maven.repo.local}/backport-util-concurrent-3.1.jar"/>
+		<pathelement location="${maven.repo.local}/commons-logging-1.0.4.jar"/>
+		<pathelement location="${maven.repo.local}/jsr107cache-1.0.jar"/>
+		<pathelement location="${maven.repo.local}/ognl-2.6.9.jar"/>
+		<pathelement location="${maven.repo.local}/xercesImpl-2.8.0.jar"/>
+		<pathelement location="${maven.repo.local}/xml-apis-1.3.03.jar"/>
+		<pathelement location="${maven.repo.local}/antlr-2.7.6.jar"/>
+		<pathelement location="${maven.repo.local}/jaxb-api-2.1.jar"/>
+		<pathelement location="${maven.repo.local}/stax-api-1.0-2.jar"/>
+		<pathelement location="${maven.repo.local}/activation-1.1.jar"/>
+		<pathelement location="${maven.repo.local}/jbossall-client-4.2.2.GA.jar"/>
+		<pathelement location="${maven.repo.local}/jboss-j2ee-4.2.2.GA.jar"/>
+		<pathelement location="${maven.repo.local}/jboss-jmx-4.2.2.GA.jar"/>
+		<pathelement location="${maven.repo.local}/persistence-api-1.0.jar"/>
+		<pathelement location="${maven.repo.local}/slf4j-api-1.5.8.jar"/>
+		<pathelement location="${maven.repo.local}/slf4j-log4j12-1.5.8.jar"/>
+		<pathelement location="${maven.repo.local}/log4j-1.2.14.jar"/>
+		<pathelement location="${maven.repo.local}/commons-lang-2.6.jar"/>
+		<pathelement location="${maven.repo.local}/commons-io-1.4.jar"/>
+		<pathelement location="${maven.repo.local}/commons-collections-3.2.1.jar"/>
+		<pathelement location="${maven.repo.local}/spring-core-3.1.0.M2.jar"/>
+		<pathelement location="${maven.repo.local}/spring-asm-3.1.0.M2.jar"/>
+		<pathelement location="${maven.repo.local}/spring-context-3.1.0.M2.jar"/>
+		<pathelement location="${maven.repo.local}/spring-aop-3.1.0.M2.jar"/>
+		<pathelement location="${maven.repo.local}/aopalliance-1.0.jar"/>
+		<pathelement location="${maven.repo.local}/spring-beans-3.1.0.M2.jar"/>
+		<pathelement location="${maven.repo.local}/spring-expression-3.1.0.M2.jar"/>
+		<pathelement location="${maven.repo.local}/commons-validator-1.3.1.jar"/>
+		<pathelement location="${maven.repo.local}/commons-beanutils-1.7.0.jar"/>
+		<pathelement location="${maven.repo.local}/commons-digester-1.6.jar"/>
+		<pathelement location="${maven.repo.local}/xstream-1.3.1.jar"/>
+		<pathelement location="${maven.repo.local}/xpp3_min-1.1.4c.jar"/>
+		<pathelement location="${maven.repo.local}/jsch-0.1.44-1.jar"/>
+		<pathelement location="${maven.repo.local}/json-20090211.jar"/>
+		<pathelement location="${maven.repo.local}/sshj-0.5.0.jar"/>
+		<pathelement location="${maven.repo.local}/commons-codec-1.3.jar"/>
+		<pathelement location="${maven.repo.local}/scannit-0.13.jar"/>
+		<pathelement location="${maven.repo.local}/javassist-3.8.0.GA.jar"/>
+		<pathelement location="${maven.repo.local}/truezip-driver-zip-7.2.jar"/>
+		<pathelement location="${maven.repo.local}/truezip-kernel-7.2.jar"/>
+		<pathelement location="${maven.repo.local}/truezip-file-7.2.jar"/>
+		<pathelement location="${maven.repo.local}/guava-r09.jar"/>
+		<pathelement location="${maven.repo.local}/httpclient-4.1.1.jar"/>
+		<pathelement location="${maven.repo.local}/httpcore-4.1.jar"/>
+		<pathelement location="${maven.repo.local}/dom4j-1.6.1.jar"/>
+		<pathelement location="${maven.repo.local}/jcifs-1.3.3.jar"/>
+		<pathelement location="${maven.repo.local}/jaxen-1.1.1.jar"/>
+		<pathelement location="${maven.repo.local}/jdom-1.0.jar"/>
+		<pathelement location="${maven.repo.local}/xom-1.0.jar"/>
+		<pathelement location="${maven.repo.local}/icu4j-2.6.1.jar"/>
+		<pathelement location="${maven.repo.local}/commons-net-2.0.jar"/>
+	</path>
+	<path id="build.test.classpath">
+		<path refid="build.classpath" />
+		<pathelement location="${maven.repo.local}/junit-4.2.jar" />
+	</path>
+
+	<!-- ====================================================================== -->
+	<!-- Cleaning up target                                                     -->
+	<!-- ====================================================================== -->
+
+	<target name="clean" description="Clean the output directory">
+		<delete dir="${maven.build.dir}" />
+	</target>
+
+	<!-- ====================================================================== -->
+	<!-- Compilation target                                                     -->
+	<!-- ====================================================================== -->
+
+	<target name="compile" depends="get-deps" description="Compile the code">
+		<mkdir dir="${maven.build.outputDir}" />
+		<javac destdir="${maven.build.outputDir}" encoding="UTF-8" nowarn="true" debug="true" optimize="false" deprecation="true" target="1.6" verbose="false" fork="true" memoryInitialSize="128m" source="1.6">
+			<src>
+				<pathelement location="${maven.build.srcDir.0}" />
+			</src>
+			<classpath refid="build.classpath" />
+		</javac>
+		<copy todir="${maven.build.outputDir}">
+			<fileset dir="${maven.build.resourceDir.0}" />
+		</copy>
+	</target>
+
+	<!-- ====================================================================== -->
+	<!-- Test-compilation target                                                -->
+	<!-- ====================================================================== -->
+
+	<target name="compile-tests" depends="compile" description="Compile the test code" unless="maven.test.skip">
+		<mkdir dir="${maven.build.testOutputDir}" />
+	</target>
+
+	<!-- ====================================================================== -->
+	<!-- Run all tests                                                          -->
+	<!-- ====================================================================== -->
+
+	<target name="test" depends="compile-tests, junit-missing" unless="junit.skipped" description="Run the test cases" />
+
+	<target name="test-junit-present">
+		<available classname="junit.framework.Test" property="junit.present" />
+	</target>
+
+	<target name="test-junit-status" depends="test-junit-present">
+		<condition property="junit.missing">
+			<and>
+				<isfalse value="${junit.present}" />
+				<isfalse value="${maven.test.skip}" />
+			</and>
+		</condition>
+		<condition property="junit.skipped">
+			<or>
+				<isfalse value="${junit.present}" />
+				<istrue value="${maven.test.skip}" />
+			</or>
+		</condition>
+	</target>
+
+	<target name="junit-missing" depends="test-junit-status" if="junit.missing">
+		<echo>=================================== WARNING ===================================</echo>
+		<echo> JUnit is not present in your $ANT_HOME/lib directory. Tests not executed.</echo>
+		<echo>===============================================================================</echo>
+	</target>
+
+	<!-- ====================================================================== -->
+	<!-- Javadoc target                                                         -->
+	<!-- ====================================================================== -->
+
+	<target name="javadoc" description="Generates the Javadoc of the application">
+		<javadoc sourcepath="${maven.build.srcDir.0}" packagenames="*" destdir="${maven.reporting.outputDirectory}/apidocs" access="protected" old="false" verbose="false" version="true" use="true" author="true" splitindex="false" nodeprecated="false" nodeprecatedlist="false" notree="false" noindex="false" nohelp="false" nonavbar="false" serialwarn="false" charset="ISO-8859-1" linksource="false" breakiterator="false" />
+	</target>
+
+	<!-- ====================================================================== -->
+	<!-- Package target                                                         -->
+	<!-- ====================================================================== -->
+
+	<target name="package" depends="compile,test" description="Package the application">
+		<jar jarfile="${maven.build.dir}/${maven.build.finalName}.jar" compress="true" index="false" basedir="${maven.build.outputDir}" excludes="**/package.html" />
+		<mkdir dir="${maven.repo.local}" />
+		<copy file="${maven.build.dir}/${maven.build.finalName}.jar" todir="${maven.repo.local}" />
+	</target>
+
+	<!-- ====================================================================== -->
+	<!-- A dummy target for the package named after the type it creates         -->
+	<!-- ====================================================================== -->
+
+	<target name="jar" depends="package" description="Builds the jar for the application" />
+
+	<!-- ====================================================================== -->
+	<!-- Download dependencies target                                           -->
+	<!-- ====================================================================== -->
+
+	<target name="test-offline">
+		<condition property="maven.mode.offline">
+			<equals arg1="${maven.settings.offline}" arg2="true" />
+		</condition>
+	</target>
+
+	<target name="get-deps" depends="test-offline" description="Download all dependencies" unless="maven.mode.offline">
+		<mkdir dir="${maven.repo.local}" />
+
+		<copy todir="${maven.repo.local}">
+			<fileset dir="${lib.repo.local}">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+
+		<get src="http://repo1.maven.org/maven2/bouncycastle/bcprov-jdk15/140/bcprov-jdk15-140.jar" dest="${maven.repo.local}/bcprov-jdk15-140.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/com/rubiconproject/oss/jchronic/0.2.6/jchronic-0.2.6.jar" dest="${maven.repo.local}/jchronic-0.2.6.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/net/sf/ehcache/ehcache/1.5.0/ehcache-1.5.0.jar" dest="${maven.repo.local}/ehcache-1.5.0.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/backport-util-concurrent/backport-util-concurrent/3.1/backport-util-concurrent-3.1.jar" dest="${maven.repo.local}/backport-util-concurrent-3.1.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/commons-logging/commons-logging/1.0.4/commons-logging-1.0.4.jar" dest="${maven.repo.local}/commons-logging-1.0.4.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/net/sf/jsr107cache/jsr107cache/1.0/jsr107cache-1.0.jar" dest="${maven.repo.local}/jsr107cache-1.0.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/ognl/ognl/2.6.9/ognl-2.6.9.jar" dest="${maven.repo.local}/ognl-2.6.9.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/xerces/xercesImpl/2.8.0/xercesImpl-2.8.0.jar" dest="${maven.repo.local}/xercesImpl-2.8.0.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/xml-apis/xml-apis/1.3.03/xml-apis-1.3.03.jar" dest="${maven.repo.local}/xml-apis-1.3.03.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/antlr/antlr/2.7.6/antlr-2.7.6.jar" dest="${maven.repo.local}/antlr-2.7.6.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/javax/xml/bind/jaxb-api/2.1/jaxb-api-2.1.jar" dest="${maven.repo.local}/jaxb-api-2.1.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2.jar" dest="${maven.repo.local}/stax-api-1.0-2.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/javax/activation/activation/1.1/activation-1.1.jar" dest="${maven.repo.local}/activation-1.1.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/jboss/jbossall-client/4.2.2.GA/jbossall-client-4.2.2.GA.jar" dest="${maven.repo.local}/jbossall-client-4.2.2.GA.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/jboss/jboss-j2ee/4.2.2.GA/jboss-j2ee-4.2.2.GA.jar" dest="${maven.repo.local}/jboss-j2ee-4.2.2.GA.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/jboss/jboss-jmx/4.2.2.GA/jboss-jmx-4.2.2.GA.jar" dest="${maven.repo.local}/jboss-jmx-4.2.2.GA.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/javax/persistence/persistence-api/1.0/persistence-api-1.0.jar" dest="${maven.repo.local}/persistence-api-1.0.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/org/slf4j/slf4j-api/1.5.8/slf4j-api-1.5.8.jar" dest="${maven.repo.local}/slf4j-api-1.5.8.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/org/slf4j/slf4j-log4j12/1.5.8/slf4j-log4j12-1.5.8.jar" dest="${maven.repo.local}/slf4j-log4j12-1.5.8.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/log4j/log4j/1.2.14/log4j-1.2.14.jar" dest="${maven.repo.local}/log4j-1.2.14.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/junit/junit/4.2/junit-4.2.jar" dest="${maven.repo.local}/junit-4.2.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/commons-lang/commons-lang/2.6/commons-lang-2.6.jar" dest="${maven.repo.local}/commons-lang-2.6.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/commons-io/commons-io/1.4/commons-io-1.4.jar" dest="${maven.repo.local}/commons-io-1.4.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.jar" dest="${maven.repo.local}/commons-collections-3.2.1.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/aopalliance/aopalliance/1.0/aopalliance-1.0.jar" dest="${maven.repo.local}/aopalliance-1.0.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/commons-validator/commons-validator/1.3.1/commons-validator-1.3.1.jar" dest="${maven.repo.local}/commons-validator-1.3.1.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar" dest="${maven.repo.local}/commons-beanutils-1.7.0.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/commons-digester/commons-digester/1.6/commons-digester-1.6.jar" dest="${maven.repo.local}/commons-digester-1.6.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/com/thoughtworks/xstream/xstream/1.3.1/xstream-1.3.1.jar" dest="${maven.repo.local}/xstream-1.3.1.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/xpp3/xpp3_min/1.1.4c/xpp3_min-1.1.4c.jar" dest="${maven.repo.local}/xpp3_min-1.1.4c.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/com/jcraft/jsch/0.1.44-1/jsch-0.1.44-1.jar" dest="${maven.repo.local}/jsch-0.1.44-1.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/org/json/json/20090211/json-20090211.jar" dest="${maven.repo.local}/json-20090211.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/net/schmizz/sshj/0.5.0/sshj-0.5.0.jar" dest="${maven.repo.local}/sshj-0.5.0.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/commons-codec/commons-codec/1.3/commons-codec-1.3.jar" dest="${maven.repo.local}/commons-codec-1.3.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/nl/javadude/scannit/scannit/0.13/scannit-0.13.jar" dest="${maven.repo.local}/scannit-0.13.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/javassist/javassist/3.8.0.GA/javassist-3.8.0.GA.jar" dest="${maven.repo.local}/javassist-3.8.0.GA.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/de/schlichtherle/truezip/truezip-driver-zip/7.2/truezip-driver-zip-7.2.jar" dest="${maven.repo.local}/truezip-driver-zip-7.2.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/de/schlichtherle/truezip/truezip-kernel/7.2/truezip-kernel-7.2.jar" dest="${maven.repo.local}/truezip-kernel-7.2.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/de/schlichtherle/truezip/truezip-file/7.2/truezip-file-7.2.jar" dest="${maven.repo.local}/truezip-file-7.2.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/com/google/guava/guava/r09/guava-r09.jar" dest="${maven.repo.local}/guava-r09.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/org/apache/httpcomponents/httpclient/4.1.1/httpclient-4.1.1.jar" dest="${maven.repo.local}/httpclient-4.1.1.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/org/apache/httpcomponents/httpcore/4.1/httpcore-4.1.jar" dest="${maven.repo.local}/httpcore-4.1.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar" dest="${maven.repo.local}/dom4j-1.6.1.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/org/samba/jcifs/jcifs/1.3.3/jcifs-1.3.3.jar" dest="${maven.repo.local}/jcifs-1.3.3.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/jaxen/jaxen/1.1.1/jaxen-1.1.1.jar" dest="${maven.repo.local}/jaxen-1.1.1.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/jdom/jdom/1.0/jdom-1.0.jar" dest="${maven.repo.local}/jdom-1.0.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/xom/xom/1.0/xom-1.0.jar" dest="${maven.repo.local}/xom-1.0.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/com/ibm/icu/icu4j/2.6.1/icu4j-2.6.1.jar" dest="${maven.repo.local}/icu4j-2.6.1.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/commons-net/commons-net/2.0/commons-net-2.0.jar" dest="${maven.repo.local}/commons-net-2.0.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/org/bouncycastle/bcprov-jdk16/1.45/bcprov-jdk16-1.45.jar" dest="${maven.repo.local}/bcprov-jdk16-1.45.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar" dest="${maven.repo.local}/commons-logging-1.1.1.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/com/jcraft/jzlib/1.0.7/jzlib-1.0.7.jar" dest="${maven.repo.local}/jzlib-1.0.7.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/de/schlichtherle/truezip/truezip-driver-file/7.2/truezip-driver-file-7.2.jar" dest="${maven.repo.local}/truezip-driver-file-7.2.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://oss.sonatype.org/content/repositories/springsource-milestones/org/springframework/spring-core/3.1.0.M2/spring-core-3.1.0.M2.jar" dest="${maven.repo.local}/spring-core-3.1.0.M2.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://oss.sonatype.org/content/repositories/springsource-milestones/org/springframework/spring-asm/3.1.0.M2/spring-asm-3.1.0.M2.jar" dest="${maven.repo.local}/spring-asm-3.1.0.M2.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://oss.sonatype.org/content/repositories/springsource-milestones/org/springframework/spring-context/3.1.0.M2/spring-context-3.1.0.M2.jar" dest="${maven.repo.local}/spring-context-3.1.0.M2.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://oss.sonatype.org/content/repositories/springsource-milestones/org/springframework/spring-aop/3.1.0.M2/spring-aop-3.1.0.M2.jar" dest="${maven.repo.local}/spring-aop-3.1.0.M2.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://oss.sonatype.org/content/repositories/springsource-milestones/org/springframework/spring-beans/3.1.0.M2/spring-beans-3.1.0.M2.jar" dest="${maven.repo.local}/spring-beans-3.1.0.M2.jar" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://oss.sonatype.org/content/repositories/springsource-milestones/org/springframework/spring-expression/3.1.0.M2/spring-expression-3.1.0.M2.jar" dest="${maven.repo.local}/spring-expression-3.1.0.M2.jar" usetimestamp="true" ignoreerrors="true" />
+	</target>
+
+</project>
