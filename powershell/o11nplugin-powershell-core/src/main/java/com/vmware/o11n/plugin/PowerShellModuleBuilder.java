@@ -38,8 +38,8 @@ public final class PowerShellModuleBuilder extends ModuleBuilder {
                         "1.0.2");
 
 		InstallationBuilder installation = installation(InstallationMode.BUILD);
-        installation.action(ActionType.INSTALL_PACKAGE,	"packages/o11nplugin-powershell-package-1.0.2-SNAPSHOT.package");
-		installation.action(ActionType.INSTALL_PACKAGE,   "packages/o11nplugin-powershell-package-converter-1.0.2-SNAPSHOT.package");
+        installation.action(ActionType.INSTALL_PACKAGE,	"packages/o11nplugin-powershell-package-1.0.2-48.package");
+		installation.action(ActionType.INSTALL_PACKAGE,   "packages/o11nplugin-powershell-package-converter-1.0.2-48.package");
 
 		inventory(Constants.FINDER_POWER_SHELL_PLUGIN);
 
